@@ -1,15 +1,18 @@
 name: RailsTest
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
       image: mysql:5.7
-      ports:
-        - 3306:3306
-        -
+
     container:
       image: ruby:2.6.3
       env:
@@ -26,6 +29,9 @@ jobs:
         run: |
           bin/rails db:create
           bin/raild db:schema:load
+      - name: Prepare yarn
+        run: |
+          yarn install --check-files
       - name: Run test
         run: |
           rubocop
